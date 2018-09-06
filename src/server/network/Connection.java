@@ -65,7 +65,6 @@ public class Connection implements CustomRunnable {
   @Override
   public void execute() {
     //handle here
-    System.out.println("Closing");
     close();
   }
 }
