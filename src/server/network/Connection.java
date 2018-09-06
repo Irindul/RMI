@@ -12,7 +12,6 @@ import java.net.Socket;
 import java.util.logging.Logger;
 import server.parser.CommandParser;
 import server.states.Idle;
-import server.states.Quit;
 import server.states.RMIState;
 
 public class Connection implements CustomRunnable {
@@ -76,7 +75,7 @@ public class Connection implements CustomRunnable {
     try {
       LOGGER.info("Waiting for commands");
       String command = in.readLine();
-      if(command != null) {
+      if (command != null) {
         LOGGER.info("Client ask for : " + command);
         state = parser.parse(command);
         state.execute();

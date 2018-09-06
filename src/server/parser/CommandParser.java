@@ -28,7 +28,7 @@ public class CommandParser {
         default:
           return new Idle();
       }
-    } catch (Exception e ){
+    } catch (Exception e) {
       return new Quit(e.getMessage());
     }
   }

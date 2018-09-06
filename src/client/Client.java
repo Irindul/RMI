@@ -1,6 +1,7 @@
 package client;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,7 +9,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.io.DataOutputStream;
 
 
 public class Client {
@@ -35,7 +35,7 @@ public class Client {
       pw.flush();
       byte[] buffer = new byte[4096];
       int read = 0;
-      while ((read=fis.read(buffer)) > 0) {
+      while ((read = fis.read(buffer)) > 0) {
         dos.write(buffer, 0, read);
       }
 
