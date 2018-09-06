@@ -43,6 +43,10 @@ public class Client {
 
       fis.close();
       dos.close();
+      pw.close();
+      br.close();
+      in.close();
+      out.close();
       socket.close();
 
     } catch (IOException e) {
