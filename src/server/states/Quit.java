@@ -18,5 +18,6 @@ public class Quit implements RMIState {
   @Override
   public void execute() {
     LOGGER.info(message);
+    Thread.currentThread().interrupt();
   }
 }

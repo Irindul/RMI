@@ -25,11 +25,13 @@ public class Connection implements CustomRunnable {
   private BufferedReader in;
   private PrintWriter out;
   private RMIState state;
+  private CommandParser parser;
 
   public Connection(Socket socket) {
     this.socket = socket;
     initializeStreams();
     state = new Idle();
+    parser = new CommandParser(inFromClient, outToClient);
   }
 
   private void initializeStreams() {
@@ -72,15 +74,17 @@ public class Connection implements CustomRunnable {
   @Override
   public void execute() {
     try {
+      LOGGER.info("Waiting for commands");
       String command = in.readLine();
-      state = CommandParser.parse(command);
-      if (state instanceof Quit) {
+      if(command != null) {
+        LOGGER.info("Client ask for : " + command);
+        state = parser.parse(command);
+        state.execute();
+      } else {
         close();
       }
-      state.execute();
     } catch (IOException e) {
       e.printStackTrace();
     }
-
   }
 }
