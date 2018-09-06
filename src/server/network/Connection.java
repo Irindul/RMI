@@ -10,6 +10,10 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.logging.Logger;
+import server.parser.CommandParser;
+import server.states.Idle;
+import server.states.Quit;
+import server.states.RMIState;
 
 public class Connection implements CustomRunnable {
 
@@ -20,10 +24,12 @@ public class Connection implements CustomRunnable {
   private OutputStream outToClient;
   private BufferedReader in;
   private PrintWriter out;
+  private RMIState state;
 
   public Connection(Socket socket) {
     this.socket = socket;
     initializeStreams();
+    state = new Idle();
   }
 
   private void initializeStreams() {
@@ -42,7 +48,8 @@ public class Connection implements CustomRunnable {
 
   }
 
-  private void close() {
+  @Override
+  public void close() {
     try {
       if (inFromClient != null) {
         inFromClient.close();
@@ -64,7 +71,16 @@ public class Connection implements CustomRunnable {
 
   @Override
   public void execute() {
-    //handle here
-    close();
+    try {
+      String command = in.readLine();
+      state = CommandParser.parse(command);
+      if (state instanceof Quit) {
+        close();
+      }
+      state.execute();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
   }
 }

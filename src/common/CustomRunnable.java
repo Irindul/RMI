@@ -13,11 +13,14 @@ public interface CustomRunnable extends Runnable {
   default void interupt() {
      Thread.currentThread().interrupt();
   }
+
+  void close();
   void execute();
 
   default void run() {
      while(isNotInterrupted()) {
        execute();
      }
+     close();
   }
 }

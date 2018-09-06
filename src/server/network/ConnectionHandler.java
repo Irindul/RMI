@@ -1,5 +1,6 @@
 package server.network;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.IO;
 import common.CustomRunnable;
 import helpers.Env;
 import java.io.IOException;
@@ -15,6 +16,17 @@ public class ConnectionHandler implements CustomRunnable {
       serverSocket = new ServerSocket(port);
       System.out.println("Listening on port " + port);
       
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Override
+  public void close() {
+    try {
+      if(serverSocket != null) {
+        serverSocket.close();
+      }
     } catch (IOException e) {
       e.printStackTrace();
     }
