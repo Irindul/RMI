@@ -22,6 +22,6 @@ public class CompilerWrapper {
   }
 
   private String getCompiledName(String pathname) {
-   return pathname.replace("java", "class");
+    return pathname.replace("java", "class");
   }
 }

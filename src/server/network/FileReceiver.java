@@ -1,8 +1,8 @@
 package server.network;
 
-import java.io.File;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -68,7 +68,7 @@ public class FileReceiver {
 
   private void initializeFolder() {
     File directory = new File("resources/client");
-    if(!directory.exists()) {
+    if (!directory.exists()) {
       directory.mkdirs();
     }
   }
