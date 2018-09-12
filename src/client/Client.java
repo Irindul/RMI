@@ -44,6 +44,8 @@ public class Client {
       }
 
       System.out.println(br.readLine());
+      pw.write("quit");
+      pw.flush();
 
       fis.close();
       dos.close();

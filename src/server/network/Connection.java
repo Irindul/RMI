@@ -68,6 +68,7 @@ public class Connection implements CustomRunnable {
       e.printStackTrace();
     }
     interupt();
+    LOGGER.info("Connection closed");
   }
 
   @Override
