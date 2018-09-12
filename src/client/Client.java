@@ -2,6 +2,7 @@ package client;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +20,10 @@ public class Client {
       OutputStream out = socket.getOutputStream();
       InputStream in = socket.getInputStream();
       DataOutputStream dos = new DataOutputStream(out);
-      FileInputStream fis = new FileInputStream("/Users/irindul/Desktop/test.txt");
+
+      String pwd = System.getProperty("user.dir");
+      pwd += File.separator;
+      FileInputStream fis = new FileInputStream(pwd + "/src/client/IntegerCalculator.java");
 
       PrintWriter pw = new PrintWriter(out);
       BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -28,7 +32,7 @@ public class Client {
       pw.flush();
       System.out.println(br.readLine());
 
-      String message = "calc.java " + fis.getChannel().size() + "\n";
+      String message = "IntegerCalculator.java " + fis.getChannel().size() + "\n";
       System.out.println(message);
 
       pw.write(message);

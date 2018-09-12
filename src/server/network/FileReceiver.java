@@ -1,5 +1,6 @@
 package server.network;
 
+import java.io.File;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileNotFoundException;
@@ -11,6 +12,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.StringTokenizer;
 
 public class FileReceiver {
@@ -32,15 +34,17 @@ public class FileReceiver {
     this.in = new BufferedReader(new InputStreamReader(inStream));
   }
 
-  public void receive() {
+  public Optional<String> receive() {
     try {
       writeAndFlush("Ready to receive file");
       parseMetadata();
       readFileFromStream();
       writeAndFlush("File received");
       fileOutputStream.close();
+      return Optional.of(fileName);
     } catch (IOException | NumberFormatException | NoSuchElementException e) {
       e.printStackTrace();
+      return Optional.empty();
     }
   }
 
@@ -58,7 +62,15 @@ public class FileReceiver {
 
   private void initializeStream() throws FileNotFoundException {
     dataInputStream = new DataInputStream(inStream);
-    fileOutputStream = new FileOutputStream("./resources/" + fileName);
+    initializeFolder();
+    fileOutputStream = new FileOutputStream("./resources/client/" + fileName);
+  }
+
+  private void initializeFolder() {
+    File directory = new File("resources/client");
+    if(!directory.exists()) {
+      directory.mkdirs();
+    }
   }
 
   private void readFileFromStream() throws IOException {
