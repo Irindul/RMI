@@ -1,12 +1,7 @@
 package client;
 
 public class IntegerCalculator {
-
-  static {
-    System.out.println("Hello");
-  }
-
-  public static int add(int a, int b) {
+  public static int add(Integer a, Integer b) {
     return a+b;
   }
 }
