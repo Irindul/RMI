@@ -1,7 +1,9 @@
 package server.parser;
 
 import helpers.SocketStreams;
+import server.states.ByteColl;
 import server.states.Idle;
+import server.states.ObjectColl;
 import server.states.Quit;
 import server.states.RMIState;
 import server.states.SourceColl;
@@ -20,6 +22,10 @@ public class CommandParser {
       switch (parsed) {
         case "sourcecoll":
           return new SourceColl(streams);
+        case "bytecoll":
+          return new ByteColl(streams);
+        case "objectcoll":
+          return new ObjectColl(streams);
         case "quit":
           return new Quit();
         default:

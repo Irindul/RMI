@@ -4,14 +4,13 @@ import helpers.SocketStreams;
 import java.util.Optional;
 import server.invokation.InvokaterWrapper;
 
-public class ObjectColl implements RMIState {
+public class ObjectColl extends AbstractRMIState {
 
-  private Class<?> clazz;
   private InvokaterWrapper invokater;
-  protected SocketStreams streams;
+  private Class<?> clazz;
 
   public ObjectColl(SocketStreams streams) {
-    this.streams = streams;
+    super(streams);
     invokater = new InvokaterWrapper(streams);
   }
 
