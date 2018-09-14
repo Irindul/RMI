@@ -1,13 +1,7 @@
 package server.invokation;
 
-import java.io.BufferedReader;
+import helpers.SocketStreams;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -17,17 +11,11 @@ import java.util.StringTokenizer;
 
 public class InvokaterWrapper {
 
-  private InputStream inStream;
-  private OutputStream outStream;
-  private BufferedReader in;
-  private PrintWriter out;
+  private SocketStreams streams;
   private Class<?> receivedClass;
 
-  public InvokaterWrapper(InputStream in, OutputStream out) {
-    this.inStream = in;
-    this.outStream = out;
-    this.out = new PrintWriter(new OutputStreamWriter(outStream));
-    this.in = new BufferedReader(new InputStreamReader(inStream));
+  public InvokaterWrapper(SocketStreams streams) {
+    this.streams = streams;
   }
 
   public InvokaterWrapper load(Class<?> receivedClass) {
@@ -38,7 +26,7 @@ public class InvokaterWrapper {
   public Optional<Integer> invoke() {
 
     try {
-      String rawArguments = in.readLine();
+      String rawArguments = streams.readLine();
       StringTokenizer tokenizer = new StringTokenizer(rawArguments);
       String methodName = tokenizer.nextToken();
       List<Integer> arguments = new ArrayList<>();

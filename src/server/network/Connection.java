@@ -1,13 +1,8 @@
 package server.network;
 
 import common.CustomRunnable;
-import java.io.BufferedReader;
+import helpers.SocketStreams;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.logging.Logger;
 import server.parser.CommandParser;
@@ -19,10 +14,7 @@ public class Connection implements CustomRunnable {
   private static Logger LOGGER = Logger.getLogger("Connection");
 
   private Socket socket;
-  private InputStream inFromClient;
-  private OutputStream outToClient;
-  private BufferedReader in;
-  private PrintWriter out;
+  private SocketStreams streams;
   private RMIState state;
   private CommandParser parser;
 
@@ -30,16 +22,12 @@ public class Connection implements CustomRunnable {
     this.socket = socket;
     initializeStreams();
     state = new Idle();
-    parser = new CommandParser(inFromClient, outToClient);
+    parser = new CommandParser(streams);
   }
 
   private void initializeStreams() {
     try {
-      inFromClient = socket.getInputStream();
-      outToClient = socket.getOutputStream();
-      in = new BufferedReader(new InputStreamReader(inFromClient));
-      out = new PrintWriter(new OutputStreamWriter(outToClient));
-
+      streams = new SocketStreams(socket.getOutputStream(), socket.getInputStream());
       LOGGER.info("Connection started on " + Thread.currentThread().getName() + " with " +
           socket.getInetAddress().toString());
     } catch (IOException e) {
@@ -52,18 +40,7 @@ public class Connection implements CustomRunnable {
   @Override
   public void close() {
     try {
-      if (inFromClient != null) {
-        inFromClient.close();
-      }
-      if (outToClient != null) {
-        outToClient.close();
-      }
-      if (in != null) {
-        in.close();
-      }
-      if (out != null) {
-        out.close();
-      }
+      streams.close();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -75,7 +52,7 @@ public class Connection implements CustomRunnable {
   public void execute() {
     try {
       LOGGER.info("Waiting for commands");
-      String command = in.readLine();
+      String command = streams.readLine();
       if (command != null) {
         LOGGER.info("Client ask for : " + command);
         state = parser.parse(command);
