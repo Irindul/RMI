@@ -12,6 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.StringTokenizer;
 
 public class InvokaterWrapper {
@@ -34,7 +35,7 @@ public class InvokaterWrapper {
     return this;
   }
 
-  public void invoke() {
+  public Optional<Integer> invoke() {
 
     try {
       String rawArguments = in.readLine();
@@ -46,18 +47,21 @@ public class InvokaterWrapper {
         arguments.add(Integer.valueOf(tokenizer.nextToken()));
       }
 
-      Class<?>[] classes = new Class[]{Integer.class, Integer.class};
+      Class<?>[] classes = new Class[arguments.size()];
+      for (int i = 0; i < classes.length; i++) {
+        classes[i] = Integer.class;
+      }
 
       Method method = receivedClass.getMethod(methodName, classes);
-      System.out.println(arguments.size());
-      Integer result = (Integer) method.invoke(receivedClass.newInstance(), arguments);
-      System.out.println(result);
+      Integer result = (Integer) method.invoke(receivedClass.newInstance(), arguments.toArray());
+      return Optional.of(result);
     } catch (IOException
         | NoSuchMethodException
         | IllegalAccessException
         | InstantiationException
         | InvocationTargetException e) {
       System.out.println(e.getMessage() + e.getLocalizedMessage());
+      return Optional.empty();
     }
   }
 
