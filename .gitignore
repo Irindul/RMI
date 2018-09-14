@@ -1,6 +1,10 @@
 # IntelliJ
 .idea/
 
+out/
+resources/*
+!resources/.gitkeep
+
 # Compiled class file
 *.class
 
