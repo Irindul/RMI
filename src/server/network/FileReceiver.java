@@ -1,45 +1,36 @@
 package server.network;
 
-import java.io.BufferedReader;
+import helpers.SocketStreams;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.StringTokenizer;
 
 public class FileReceiver {
 
-  private InputStream inStream;
-  private OutputStream outStream;
+  private SocketStreams streams;
   private DataInputStream dataInputStream;
   private FileOutputStream fileOutputStream;
-  private BufferedReader in;
-  private PrintWriter out;
+
   private String fileName;
   private int size;
 
-  public FileReceiver(InputStream in, OutputStream out) {
-    this.inStream = in;
-    this.outStream = out;
-    dataInputStream = new DataInputStream(in);
-    this.out = new PrintWriter(new OutputStreamWriter(outStream));
-    this.in = new BufferedReader(new InputStreamReader(inStream));
+  public FileReceiver(SocketStreams streams) {
+    this.streams = streams;
+
+    dataInputStream = new DataInputStream(streams.getInputStream());
   }
 
   public Optional<String> receive() {
     try {
-      writeAndFlush("Ready to receive file");
+      streams.writeAndFlush("Ready to receive file");
       parseMetadata();
       readFileFromStream();
-      writeAndFlush("File received");
+      streams.writeAndFlush("File received");
       fileOutputStream.close();
       return Optional.of(fileName);
     } catch (IOException | NumberFormatException | NoSuchElementException e) {
@@ -48,20 +39,15 @@ public class FileReceiver {
     }
   }
 
-  private void writeAndFlush(String message) {
-    out.write(message + "\n");
-    out.flush();
-  }
-
   private void parseMetadata() throws IOException {
-    StringTokenizer tokenizer = new StringTokenizer(in.readLine());
+    StringTokenizer tokenizer = new StringTokenizer(streams.readLine());
     fileName = tokenizer.nextToken();
     size = Integer.valueOf(tokenizer.nextToken());
     initializeStream();
   }
 
   private void initializeStream() throws FileNotFoundException {
-    dataInputStream = new DataInputStream(inStream);
+    dataInputStream = new DataInputStream(streams.getInputStream());
     initializeFolder();
     fileOutputStream = new FileOutputStream("./resources/client/" + fileName);
   }

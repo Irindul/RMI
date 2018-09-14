@@ -1,7 +1,6 @@
 package server.parser;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import helpers.SocketStreams;
 import server.states.Idle;
 import server.states.Quit;
 import server.states.RMIState;
@@ -9,12 +8,10 @@ import server.states.SourceColl;
 
 public class CommandParser {
 
-  private InputStream inFromClient;
-  private OutputStream outToClient;
+  private SocketStreams streams;
 
-  public CommandParser(InputStream inFromClient, OutputStream outToClient) {
-    this.inFromClient = inFromClient;
-    this.outToClient = outToClient;
+  public CommandParser(SocketStreams streams) {
+    this.streams = streams;
   }
 
   public RMIState parse(String command) {
@@ -22,7 +19,7 @@ public class CommandParser {
       String parsed = command.split(" ")[0].toLowerCase();
       switch (parsed) {
         case "sourcecoll":
-          return new SourceColl(inFromClient, outToClient);
+          return new SourceColl(streams);
         case "quit":
           return new Quit();
         default:
