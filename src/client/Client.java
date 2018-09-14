@@ -44,6 +44,10 @@ public class Client {
       }
 
       System.out.println(br.readLine());
+
+      pw.write("add 3 5\n");
+      pw.flush();
+
       pw.write("quit");
       pw.flush();
 

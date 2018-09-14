@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Optional;
 import server.invokation.CompilerWrapper;
+import server.invokation.InvokaterWrapper;
 import server.invokation.LoaderWrapper;
 import server.network.FileReceiver;
 
@@ -15,11 +16,13 @@ public class SourceColl implements RMIState {
   private FileReceiver fileReceiver;
   private CompilerWrapper compiler;
   private LoaderWrapper loader;
+  private InvokaterWrapper invokater;
 
   public SourceColl(InputStream inFromClient, OutputStream outToClient) {
     fileReceiver = new FileReceiver(inFromClient, outToClient);
     compiler = new CompilerWrapper();
     loader = new LoaderWrapper();
+    invokater = new InvokaterWrapper(inFromClient, outToClient);
   }
 
   @Override
@@ -32,14 +35,7 @@ public class SourceColl implements RMIState {
         Optional<Class<?>> optionalClass = loader.load(compiledFilePath);
         optionalClass.ifPresent(cls -> {
           //Execute method;
-          try {
-            System.out.println(int.class);
-            Method method = cls.getMethod("add", int.class, int.class);
-            Integer test = (Integer) method.invoke(null, 2, 2);
-            System.out.println("Result : " + test);
-          } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-          }
+          invokater.load(cls).invoke();
         });
       });
     });
