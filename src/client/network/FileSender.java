@@ -30,7 +30,6 @@ public class FileSender {
     } catch (IOException e) {
       e.printStackTrace();
     }
-
   }
 
   private void openFileInputStrem(String absolutePath) throws IOException{

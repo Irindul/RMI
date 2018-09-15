@@ -12,7 +12,7 @@ public class ClientInterface {
   }
 
   public ClientInterface() {
-    actions = new ArrayList<>();
+    ArrayList<String> actions = new ArrayList<>();
     actions.add("1) SourceColl (send a .java file)");
     actions.add("2) ByteColl (send a .class file)");
     actions.add("3) ObjectColl (send a serialized java file)");
@@ -46,6 +46,12 @@ public class ClientInterface {
   private void displayActions() {
     System.out.println("Which action would like to do on the server ?");
     actions.forEach(System.out::println);
+  }
+
+  public static String getFileNameFromUser() {
+    System.out.println("Enter file path (absolute) : ");
+    Scanner sc = new Scanner(System.in);
+    return sc.nextLine();
   }
 
 }
