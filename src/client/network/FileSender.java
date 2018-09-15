@@ -21,32 +21,39 @@ public class FileSender {
     String fileName = getFileName(absolutePath);
 
     try {
-      fis = new FileInputStream(absolutePath);
-      String ack = streams.readLine();
-      System.out.println(ack);
-
+      openFileInputStrem(absolutePath);
+      ack();
       streams.writeAndFlush(fileName + " " + fis.getChannel().size());
-
-      byte[] buffer = new byte[4096];
-      int read = 0;
-      while ((read = fis.read(buffer)) > 0) {
-        dos.write(buffer, 0, read);
-      }
-
-      ack = streams.readLine();
-      System.out.println(ack);
-
+      sendFile();
+      ack();
       fis.close();
-
     } catch (IOException e) {
       e.printStackTrace();
     }
 
   }
 
+  private void openFileInputStrem(String absolutePath) throws IOException{
+    fis = new FileInputStream(absolutePath);
+  }
+
   private String getFileName(String absolutePath) {
     String[] parts = absolutePath.split(File.separator);
     return parts[parts.length - 1];
+  }
+
+  private void ack() throws IOException{
+    String ack = streams.readLine();
+    System.out.println(ack);
+
+  }
+
+  private void sendFile() throws IOException {
+    byte[] buffer = new byte[4096];
+    int read = 0;
+    while ((read = fis.read(buffer)) > 0) {
+      dos.write(buffer, 0, read);
+    }
   }
 
   public void close() {
