@@ -7,8 +7,11 @@ public abstract class AbstractClientState implements ClientState {
   protected String name;
   protected SocketStreams streams;
 
-  public AbstractClientState(String name, SocketStreams streams) {
+  public AbstractClientState(String name) {
     this.name = name;
+  }
+
+  public void setStreams(SocketStreams streams) {
     this.streams = streams;
   }
 

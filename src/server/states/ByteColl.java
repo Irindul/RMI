@@ -9,7 +9,7 @@ public class ByteColl extends ObjectColl {
   private LoaderWrapper loader;
 
   public ByteColl(SocketStreams streams) {
-    super(streams);
+    super(streams, false);
     loader = new LoaderWrapper();
   }
 

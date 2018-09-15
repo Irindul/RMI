@@ -12,11 +12,17 @@ public class ClientInterface {
   }
 
   public ClientInterface() {
-    ArrayList<String> actions = new ArrayList<>();
+    actions = new ArrayList<>();
     actions.add("1) SourceColl (send a .java file)");
     actions.add("2) ByteColl (send a .class file)");
     actions.add("3) ObjectColl (send a serialized java file)");
     actions.add("4) Quit");
+  }
+
+  public static String askMethod() {
+    System.out.println("Enter method name and arguemnts (add 2 4) : ");
+    Scanner sc = new Scanner(System.in);
+    return sc.nextLine();
   }
 
   public String selectState() {

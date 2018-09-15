@@ -8,8 +8,8 @@ public class Sourcecoller extends AbstractClientState {
 
   private FileSender fileSender;
 
-  public Sourcecoller(String name, SocketStreams streams) {
-    super(name, streams);
+  public Sourcecoller(String name) {
+    super(name);
     fileSender = new FileSender(streams);
   }
 

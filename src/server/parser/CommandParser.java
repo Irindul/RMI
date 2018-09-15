@@ -25,7 +25,7 @@ public class CommandParser {
         case "bytecoll":
           return new ByteColl(streams);
         case "objectcoll":
-          return new ObjectColl(streams);
+          return new ObjectColl(streams, true);
         case "quit":
           return new Quit();
         default:
