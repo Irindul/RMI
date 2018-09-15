@@ -1,6 +1,6 @@
 package server.network;
 
-import common.CustomRunnable;
+import common.LoopingRunnable;
 import helpers.SocketStreams;
 import java.io.IOException;
 import java.net.Socket;
@@ -9,7 +9,7 @@ import server.parser.CommandParser;
 import server.states.Idle;
 import server.states.RMIState;
 
-public class Connection implements CustomRunnable {
+public class Connection implements LoopingRunnable {
 
   private static Logger LOGGER = Logger.getLogger("Connection");
 

@@ -1,6 +1,6 @@
 package common;
 
-public interface CustomRunnable extends Runnable {
+public interface LoopingRunnable extends Runnable {
 
   default boolean isNotInterrupted() {
     return !isInterrupted();
