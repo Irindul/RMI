@@ -9,7 +9,7 @@ public class ByteColl extends ObjectColl {
   private LoaderWrapper loader;
 
   public ByteColl(SocketStreams streams) {
-    super(streams);
+    super(streams, false);
     loader = new LoaderWrapper();
   }
 
@@ -20,6 +20,8 @@ public class ByteColl extends ObjectColl {
   }
 
   protected void subexecution(String compiledFilePath) {
+    System.out.println("Loading");
+
     Optional<Class<?>> optionalClass = loader.load(compiledFilePath);
     optionalClass.ifPresent(cls -> {
       super.setClazz(cls);

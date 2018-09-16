@@ -1,6 +1,6 @@
 package server.network;
 
-import common.CustomRunnable;
+import common.LoopingRunnable;
 import helpers.SocketStreams;
 import java.io.IOException;
 import java.net.Socket;
@@ -9,7 +9,7 @@ import server.parser.CommandParser;
 import server.states.Idle;
 import server.states.RMIState;
 
-public class Connection implements CustomRunnable {
+public class Connection implements LoopingRunnable {
 
   private static Logger LOGGER = Logger.getLogger("Connection");
 
@@ -17,6 +17,7 @@ public class Connection implements CustomRunnable {
   private SocketStreams streams;
   private RMIState state;
   private CommandParser parser;
+  private boolean open = true;
 
   public Connection(Socket socket) {
     this.socket = socket;
@@ -45,7 +46,10 @@ public class Connection implements CustomRunnable {
       e.printStackTrace();
     }
     interupt();
-    LOGGER.info("Connection closed");
+    if(open) {
+      LOGGER.info("Connection closed");
+      open = false;
+    }
   }
 
   @Override

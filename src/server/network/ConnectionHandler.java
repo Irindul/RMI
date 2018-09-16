@@ -1,12 +1,12 @@
 package server.network;
 
-import common.CustomRunnable;
+import common.LoopingRunnable;
 import helpers.Env;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ConnectionHandler implements CustomRunnable {
+public class ConnectionHandler implements LoopingRunnable {
 
   private ServerSocket serverSocket;
 

@@ -27,7 +27,7 @@ public class FileReceiver {
 
   public Optional<String> receive() {
     try {
-      streams.writeAndFlush("Ready to receive file");
+      streams.writeAndFlush("Ready to send file");
       parseMetadata();
       readFileFromStream();
       streams.writeAndFlush("File received");
