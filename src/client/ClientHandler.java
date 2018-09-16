@@ -3,6 +3,7 @@ package client;
 import client.states.AbstractClientState;
 import client.states.ClientState;
 import client.states.ClientStateFactory;
+import client.states.Quiter;
 import common.LoopingRunnable;
 import helpers.SocketStreams;
 import java.io.IOException;
@@ -48,8 +49,9 @@ public class ClientHandler implements LoopingRunnable {
       ((AbstractClientState)state).setStreams(streams);
     }
 
-    if(state instanceof Quit) {
+    if(state instanceof Quiter) {
       this.interupt();
+      return;
     }
     state.interact();
 
