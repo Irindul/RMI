@@ -17,6 +17,7 @@ public class Connection implements LoopingRunnable {
   private SocketStreams streams;
   private RMIState state;
   private CommandParser parser;
+  private boolean open = true;
 
   public Connection(Socket socket) {
     this.socket = socket;
@@ -45,7 +46,10 @@ public class Connection implements LoopingRunnable {
       e.printStackTrace();
     }
     interupt();
-    LOGGER.info("Connection closed");
+    if(open) {
+      LOGGER.info("Connection closed");
+      open = false;
+    }
   }
 
   @Override
