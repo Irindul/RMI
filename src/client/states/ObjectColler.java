@@ -1,6 +1,5 @@
 package client.states;
 
-import client.ClientInterface;
 import client.IntegerCalculator;
 import java.io.IOException;
 import java.io.ObjectOutputStream;

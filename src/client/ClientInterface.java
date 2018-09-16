@@ -15,7 +15,7 @@ public class ClientInterface {
     actions = new ArrayList<>();
     actions.add("1) SourceColl (send a .java file)");
     actions.add("2) ByteColl (send a .class file)");
-    actions.add("3) ObjectColl (send a serialized java file)");
+    actions.add("3) ObjectColl (send a serialized java object)");
     actions.add("4) Quit");
   }
 
@@ -54,8 +54,16 @@ public class ClientInterface {
     actions.forEach(System.out::println);
   }
 
-  public static String getFileNameFromUser() {
-    System.out.println("Enter file path (absolute) : ");
+  public static String askFileName(boolean compiled) {
+    String message = "Enter absolute path ";
+    if(compiled) {
+      message+="for .class ";
+    } else {
+      message+="for .java ";
+    }
+
+    message+="file";
+    System.out.println(message);
     Scanner sc = new Scanner(System.in);
     return sc.nextLine();
   }

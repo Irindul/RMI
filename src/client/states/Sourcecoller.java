@@ -2,7 +2,6 @@ package client.states;
 
 import client.ClientInterface;
 import client.network.FileSender;
-import helpers.SocketStreams;
 
 public class Sourcecoller extends AbstractClientState {
 
@@ -15,7 +14,7 @@ public class Sourcecoller extends AbstractClientState {
 
   @Override
   public void subinteractions() {
-    String path = ClientInterface.getFileNameFromUser();
+    String path = ClientInterface.askFileName(false);
     fileSender.send(path);
 
     //todo rest

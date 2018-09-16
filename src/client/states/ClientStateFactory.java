@@ -5,6 +5,8 @@ public class ClientStateFactory {
     switch (action) {
       case "sourcecoll":
         return new Sourcecoller(action);
+      case "bytecoll":
+        return new ByteColler(action);
       case "objectcoll":
         return new ObjectColler(action);
       case "quit":
