@@ -5,19 +5,16 @@ import client.network.FileSender;
 
 public class Sourcecoller extends AbstractClientState {
 
-  private FileSender fileSender;
 
   public Sourcecoller(String name) {
     super(name);
-    fileSender = new FileSender(streams);
   }
 
   @Override
   public void subinteractions() {
+    FileSender fileSender = new FileSender(this.streams);
     String path = ClientInterface.askFileName(false);
     fileSender.send(path);
-
-    //todo rest
   }
 
 }
