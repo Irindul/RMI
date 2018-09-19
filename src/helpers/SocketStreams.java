@@ -36,10 +36,10 @@ public class SocketStreams {
   }
 
   public String readLine() throws IOException {
-    return  in.readLine();
+    return in.readLine();
   }
 
-  public void close() throws IOException{
+  public void close() throws IOException {
     if (inputStream != null) {
       inputStream.close();
     }

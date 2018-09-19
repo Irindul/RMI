@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.util.StringTokenizer;
-import server.states.Quit;
 
 public class ClientHandler implements LoopingRunnable {
 
@@ -21,11 +20,15 @@ public class ClientHandler implements LoopingRunnable {
 
   public ClientHandler(String ip, int port) {
     try {
-      this.socket = socket = new Socket(ip, port);
+      this.socket = new Socket(ip, port);
       this.streams = new SocketStreams(socket.getOutputStream(), socket.getInputStream());
       clientInterface = new ClientInterface();
     } catch (ConnectException e) {
-      System.out.println("The server could not be reached");
+      System.out.println("The server could not be reached. Make sure you verify address and port : ");
+      System.out.println("Address : " + ip);
+      System.out.println("Port : " + port);
+      System.out.println("Ensure the server is started as well");
+      this.interupt();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -42,42 +45,68 @@ public class ClientHandler implements LoopingRunnable {
   }
 
   @Override
+  public void run() {
+    execute();
+    close();
+  }
+
+  @Override
   public void execute() {
+    if(clientInterface == null) {
+      return;
+    }
     action = clientInterface.selectState();
     ClientState state = ClientStateFactory.getClientState(action);
     if (state instanceof AbstractClientState) {
-      ((AbstractClientState)state).setStreams(streams);
+      ((AbstractClientState) state).setStreams(streams);
     }
 
-    if(state instanceof Quiter) {
+    if (state instanceof Quiter) {
       this.interupt();
       return;
     }
     state.interact();
-
-    String methodNameAndArgs = ClientInterface.askMethod();
-    streams.writeAndFlush(methodNameAndArgs);
-
-    try {
-      Integer result = Integer.valueOf(streams.readLine());
-      System.out.println("Result of  " + getPrototypeMethod(methodNameAndArgs) + " is " + result);
-      System.out.println();
-      Thread.sleep(500);
-    } catch (IOException e) {
-      interupt();
-    } catch (InterruptedException e) {
-      //Not a problem
+    if (this.isInterrupted()) {
+      return;
     }
+
+    askMethod();
+  }
+
+  private void askMethod() {
+    boolean loop = false;
+    String message = "";
+    do {
+      loop = false;
+      String methodNameAndArgs = ClientInterface.askMethod();
+      streams.writeAndFlush(methodNameAndArgs);
+
+      try {
+        message = streams.readLine();
+        Integer result = Integer.valueOf(message);
+        System.out.println("Result of  " + getPrototypeMethod(methodNameAndArgs) + " is " + result);
+      } catch (NumberFormatException e) {
+        if ("no such method".equals(message.toLowerCase())) {
+          System.out.println(
+              "The method does not exist ! "
+                  + "Please ensure you have the correct arguments/method name"
+          );
+          loop = true;
+        }
+      } catch (IOException e) {
+        interupt();
+      }
+    } while (loop);
   }
 
   private String getPrototypeMethod(String methodNameAndArgs) {
     StringTokenizer tokenizer = new StringTokenizer(methodNameAndArgs);
     StringBuilder prototype = new StringBuilder(tokenizer.nextToken());
     prototype.append("(");
-    while(tokenizer.hasMoreTokens()) {
+    while (tokenizer.hasMoreTokens()) {
       String token = tokenizer.nextToken();
       prototype.append(token);
-      if(tokenizer.hasMoreTokens()) {
+      if (tokenizer.hasMoreTokens()) {
         prototype.append(", ");
       }
     }

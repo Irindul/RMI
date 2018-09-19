@@ -1,6 +1,7 @@
 package client.states;
 
 public class ClientStateFactory {
+
   public static ClientState getClientState(String action) {
     switch (action) {
       case "sourcecoll":
@@ -10,7 +11,7 @@ public class ClientStateFactory {
       case "objectcoll":
         return new ObjectColler(action);
       case "quit":
-        return new Quiter();
+        return new Quiter(action);
       default:
         return new Idle();
     }
