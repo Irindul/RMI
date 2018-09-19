@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.util.StringTokenizer;
-import server.states.Quit;
 
 public class ClientHandler implements LoopingRunnable {
 
@@ -46,15 +45,15 @@ public class ClientHandler implements LoopingRunnable {
     action = clientInterface.selectState();
     ClientState state = ClientStateFactory.getClientState(action);
     if (state instanceof AbstractClientState) {
-      ((AbstractClientState)state).setStreams(streams);
+      ((AbstractClientState) state).setStreams(streams);
     }
 
-    if(state instanceof Quiter) {
+    if (state instanceof Quiter) {
       this.interupt();
       return;
     }
     state.interact();
-    if(this.isInterrupted()) {
+    if (this.isInterrupted()) {
       return;
     }
 
@@ -89,17 +88,17 @@ public class ClientHandler implements LoopingRunnable {
       } catch (InterruptedException e) {
         //Not a problem
       }
-    } while(loop);
+    } while (loop);
   }
 
   private String getPrototypeMethod(String methodNameAndArgs) {
     StringTokenizer tokenizer = new StringTokenizer(methodNameAndArgs);
     StringBuilder prototype = new StringBuilder(tokenizer.nextToken());
     prototype.append("(");
-    while(tokenizer.hasMoreTokens()) {
+    while (tokenizer.hasMoreTokens()) {
       String token = tokenizer.nextToken();
       prototype.append(token);
-      if(tokenizer.hasMoreTokens()) {
+      if (tokenizer.hasMoreTokens()) {
         prototype.append(", ");
       }
     }

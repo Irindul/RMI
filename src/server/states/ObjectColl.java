@@ -25,7 +25,7 @@ public class ObjectColl extends AbstractRMIState {
 
   @Override
   public void execute() {
-    if(shouldReceiveSerializable) {
+    if (shouldReceiveSerializable) {
       receiveSerializable();
     }
 

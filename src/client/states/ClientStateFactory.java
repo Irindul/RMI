@@ -1,6 +1,7 @@
 package client.states;
 
 public class ClientStateFactory {
+
   public static ClientState getClientState(String action) {
     switch (action) {
       case "sourcecoll":
