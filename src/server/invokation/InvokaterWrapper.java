@@ -48,6 +48,7 @@ public class InvokaterWrapper {
         Method method = receivedClass.getMethod(methodName, classes);
 
         Integer result = (Integer) method.invoke(receivedClass.newInstance(), arguments.toArray());
+        LOGGER.info("Method successfully invoked : " + result);
         value = Optional.of(result);
       } catch (NoSuchMethodException e) {
         streams.writeAndFlush("no such method");

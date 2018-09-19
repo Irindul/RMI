@@ -32,8 +32,12 @@ public class FileReceiver {
       streams.writeAndFlush("Ready to send file");
       parseMetadata();
       readFileFromStream();
-      streams.writeAndFlush("File received");
+
+      String ack = "File received";
+      streams.writeAndFlush(ack);
       fileOutputStream.close();
+
+      LOGGER.info(ack);
       return Optional.of(fileName);
     } catch (SocketException e) {
       String message = e.getLocalizedMessage();
@@ -65,6 +69,7 @@ public class FileReceiver {
   private void initializeFolder() {
     File directory = new File("resources/client");
     if (!directory.exists()) {
+      LOGGER.info("The directory structure was created");
       directory.mkdirs();
     }
   }

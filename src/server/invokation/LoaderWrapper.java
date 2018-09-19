@@ -7,9 +7,11 @@ import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 public class LoaderWrapper {
 
+  private static final Logger LOGGER = Logger.getLogger("LoaderWrapper");
   private URL url;
 
   public LoaderWrapper() {
@@ -35,6 +37,9 @@ public class LoaderWrapper {
       //Here we assume package is client
       String packageStructure = "client.";
       Class<?> cls = Class.forName(packageStructure + compiledFileName, true, classLoader);
+
+      LOGGER.info("Class was successfully loaded");
+
       return Optional.of(cls);
     } catch (ClassNotFoundException e) {
       e.printStackTrace();
