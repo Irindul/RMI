@@ -22,4 +22,8 @@ public class IntegerCalculator implements Serializable {
   public static int add(Integer a, Integer b) {
     return a + b;
   }
+
+  public static int add(Integer a, Integer b, Integer c) {
+    return a + b + c;
+  }
 }

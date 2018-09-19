@@ -6,6 +6,12 @@
 Le projet utilise le niveau de langage Java 8.
 On peut trouver le JDK [ici](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
 
+### Éxécution
+
+Dans un terminal, éxécuter les commandes suivantes :  
+`$ java -jar ./build/server.jar`, cela lance le serveur sur le port 8080 (voir section Fonctionalités pour plus de détails).  
+`$ java -jar ./build/client.jar`, cela lance l'interface console du client. 
+
 ### Détails
 
 Le projet est architecturé dans deux packages : 
@@ -29,7 +35,7 @@ Le projet est architecturé dans deux packages :
  
  cela nous permet ensuite d'utiliser la programmation fonctionelle pour faire par exemple ce genre d'opérations : 
  ```java
- optional.ifPresent((t) -> {
+ optional.ifPresent((value) -> {
    //Insert code here
  });
  ```
@@ -45,7 +51,7 @@ Les expressions lambda de Java 8 permettent de limiter la verbosité :
 
 Avec expression lambda : 
  ```java
- optional.ifPresent((t) -> {
+ optional.ifPresent((value) -> {
    //Insert code here
  });
  ```
@@ -53,7 +59,8 @@ Avec expression lambda :
 Sans expression lambda : 
 ```java
 optional.ifPresent(new Consumer<Type>() {
-  public void accept(Type t) {
+  @Override
+  public void accept(Type value) {
     //Insert code here
   }
 });
@@ -98,7 +105,43 @@ Toute autre commande sera apparentée à la commande `quit` et terminera la conn
  
  ##### ByteColl
  La récéption de fichier se passe exactement de la même manière qu'avec SourceColl 
- (voire [FileReceiver](./src/server/network/FileReceiver.java) pour plus de détails concernant l'imlémentation).
+ (voir [FileReceiver](./src/server/network/FileReceiver.java) pour plus de détails concernant l'imlémentation).
  
  Comme le fichier est déja compilé ici, on se charge uniquement de loader la classe, l'instancier et l'éxécuter.
-  
+ 
+ ##### ObjectColl
+ Ici, on suppose que le serveur possède déja la classe (déja loadé) et qu'il sait comment la déserialiser. 
+ On réceptionne l'ojet sérialisé envoyé depuis le client, on l'instancie et on exécute la méthode. 
+ 
+ Comme précisé précedemment, le pattern Adapter à été mis en place pour réutiliser le code de loading et d'éxecution de méthode ! 
+ 
+Une fois la classe instancié correctement, le serveur attend que le client lui envoie la méthode, avec les paramètres. 
+La syntaxe suivante doit être employée :  
+`add 5 2`
+En considérant que la méthode de l'objet à le prototype `int add(Integer a, Integer b)`.
+ 
+ **Nous faisons également la supposition que le type de retour et des paramètres de la méthode
+ est `Integer`.** 
+ 
+ Le nombre d'arguments peut être supérieur à 2.
+ 
+ #### Client
+ 
+ Le client possède une interface de type console où différentes intéractions peuvent être éffectuées. 
+ En premier lieu, il est demandé de renseigner l'adresse IP (IPv4) du serveur et le port 
+ sur lequel l'application tourne. 
+ Par défaut, l'adresse IP du serveur est "127.0.0.1" et le port est "8080". 
+ 
+ Ensuite, on demande à l'utilisateur quel action il veut effectuer sur le serveur. 
+ L'encapsulation des appels socket permet de rendre l'utilisation de l'application plus facile pour les utilisateurs.  
+ Selon le choix, il peut être demandé de choisir le fichier à envoyé. 
+ Bien que le choix soit laissé libre ici (à condition de respecter l'architecture de package clientMaClasse)
+ il est conseillé d'envoyer le fichier '/src/client/IntegerCalculator' car aucun test n'a été effectué pour s'assurer du fonctionnement. 
+ Si ObjectColl est choisi, une nouvelle instance de IntegerCalculator est crée et l'objet est envoyé sérialisé au serveur.
+ La sérialization se fait avec celle de Java, en implémentant la méthode `Serialize` dans `IntegerCalculator`.
+ 
+ 
+ Enfin, on demande quelle méthode appeler avec quels paramètres. 
+ Liste des méthodes appelées avec un exemple d'utilisation : 
+ `IntegerCalculator.add(Integer a, Integer b)` appelée avec `add 5 2`
+ `IntegerCalculator.add(Integer a, Integer b, Integer c)` appelée avec `add 3 7 78`
