@@ -4,6 +4,7 @@ import helpers.SocketStreams;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class FileSender {
@@ -27,12 +28,16 @@ public class FileSender {
       sendFile();
       ack();
       fis.close();
+    } catch (FileNotFoundException e) {
+      System.out.println("The file " + absolutePath + " could not be open");
+      Thread.currentThread().interrupt();
     } catch (IOException e) {
-      e.printStackTrace();
+      System.out.println("There was a connection problem");
+      Thread.currentThread().interrupt();
     }
   }
 
-  private void openFileInputStrem(String absolutePath) throws IOException{
+  private void openFileInputStrem(String absolutePath) throws FileNotFoundException {
     fis = new FileInputStream(absolutePath);
   }
 
@@ -41,10 +46,9 @@ public class FileSender {
     return parts[parts.length - 1];
   }
 
-  private void ack() throws IOException{
+  private void ack() throws IOException {
     String ack = streams.readLine();
     System.out.println(ack);
-
   }
 
   private void sendFile() throws IOException {

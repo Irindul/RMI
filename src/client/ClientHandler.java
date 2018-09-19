@@ -54,6 +54,9 @@ public class ClientHandler implements LoopingRunnable {
       return;
     }
     state.interact();
+    if(this.isInterrupted()) {
+      return;
+    }
 
     String methodNameAndArgs = ClientInterface.askMethod();
     streams.writeAndFlush(methodNameAndArgs);

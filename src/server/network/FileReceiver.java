@@ -6,12 +6,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.NoSuchElementException;
+import java.net.SocketException;
 import java.util.Optional;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
 
 public class FileReceiver {
 
+  private static final Logger LOGGER = Logger.getLogger("FileReceiver");
   private SocketStreams streams;
   private DataInputStream dataInputStream;
   private FileOutputStream fileOutputStream;
@@ -33,8 +35,16 @@ public class FileReceiver {
       streams.writeAndFlush("File received");
       fileOutputStream.close();
       return Optional.of(fileName);
-    } catch (IOException | NumberFormatException | NoSuchElementException e) {
-      e.printStackTrace();
+    } catch (SocketException e) {
+      String message = e.getLocalizedMessage();
+      if ("connection reset".equals(message)) {
+        LOGGER.info(message);
+        Thread.currentThread().interrupt();
+      }
+      return Optional.empty();
+    } catch (IOException e) {
+      LOGGER.severe(e.getMessage());
+      Thread.currentThread().interrupt();
       return Optional.empty();
     }
   }
