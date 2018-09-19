@@ -45,6 +45,12 @@ public class ClientHandler implements LoopingRunnable {
   }
 
   @Override
+  public void run() {
+    execute();
+    close();
+  }
+
+  @Override
   public void execute() {
     if(clientInterface == null) {
       return;
@@ -67,7 +73,6 @@ public class ClientHandler implements LoopingRunnable {
     askMethod();
   }
 
-
   private void askMethod() {
     boolean loop = false;
     String message = "";
@@ -80,8 +85,6 @@ public class ClientHandler implements LoopingRunnable {
         message = streams.readLine();
         Integer result = Integer.valueOf(message);
         System.out.println("Result of  " + getPrototypeMethod(methodNameAndArgs) + " is " + result);
-        System.out.println();
-        Thread.sleep(500);
       } catch (NumberFormatException e) {
         if ("no such method".equals(message.toLowerCase())) {
           System.out.println(
@@ -92,8 +95,6 @@ public class ClientHandler implements LoopingRunnable {
         }
       } catch (IOException e) {
         interupt();
-      } catch (InterruptedException e) {
-        //Not a problem
       }
     } while (loop);
   }

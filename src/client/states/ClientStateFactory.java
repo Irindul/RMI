@@ -11,7 +11,7 @@ public class ClientStateFactory {
       case "objectcoll":
         return new ObjectColler(action);
       case "quit":
-        return new Quiter();
+        return new Quiter(action);
       default:
         return new Idle();
     }

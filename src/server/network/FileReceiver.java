@@ -47,6 +47,7 @@ public class FileReceiver {
       }
       return Optional.empty();
     } catch (IOException e) {
+      System.out.println(LOGGER.getLevel());
       LOGGER.severe(e.getMessage());
       Thread.currentThread().interrupt();
       return Optional.empty();
@@ -80,9 +81,11 @@ public class FileReceiver {
     int read;
     int remaining = size;
 
+
     while ((read = dataInputStream.read(buffer, 0, Math.min(buffer.length, remaining))) > 0) {
       remaining -= read;
       fileOutputStream.write(buffer, 0, read);
     }
+    fileOutputStream.flush();
   }
 }

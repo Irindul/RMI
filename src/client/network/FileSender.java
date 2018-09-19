@@ -54,9 +54,12 @@ public class FileSender {
   private void sendFile() throws IOException {
     byte[] buffer = new byte[4096];
     int read = 0;
+
     while ((read = fis.read(buffer)) > 0) {
-      dos.write(buffer, 0, read);
+      streams.getOutputStream().write(buffer, 0, read);
     }
+
+   streams.getOutputStream().flush();
   }
 
   public void close() {
