@@ -56,10 +56,10 @@ public class Connection implements LoopingRunnable {
   @Override
   public void execute() {
     try {
-      LOGGER.info("Waiting for commands");
+      LOGGER.info("Waiting for command");
       String command = streams.readLine();
       if (command != null) {
-        LOGGER.info("Client ask for : " + command);
+        LOGGER.info("Client asked for : " + command);
         state = parser.parse(command);
         state.execute();
       } else {
