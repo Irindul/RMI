@@ -20,11 +20,15 @@ public class ClientHandler implements LoopingRunnable {
 
   public ClientHandler(String ip, int port) {
     try {
-      this.socket = socket = new Socket(ip, port);
+      this.socket = new Socket(ip, port);
       this.streams = new SocketStreams(socket.getOutputStream(), socket.getInputStream());
       clientInterface = new ClientInterface();
     } catch (ConnectException e) {
-      System.out.println("The server could not be reached");
+      System.out.println("The server could not be reached. Make sure you verify address and port : ");
+      System.out.println("Address : " + ip);
+      System.out.println("Port : " + port);
+      System.out.println("Ensure the server is started as well");
+      this.interupt();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -42,6 +46,9 @@ public class ClientHandler implements LoopingRunnable {
 
   @Override
   public void execute() {
+    if(clientInterface == null) {
+      return;
+    }
     action = clientInterface.selectState();
     ClientState state = ClientStateFactory.getClientState(action);
     if (state instanceof AbstractClientState) {
