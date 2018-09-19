@@ -58,19 +58,38 @@ public class ClientHandler implements LoopingRunnable {
       return;
     }
 
-    String methodNameAndArgs = ClientInterface.askMethod();
-    streams.writeAndFlush(methodNameAndArgs);
+    askMethod();
+  }
 
-    try {
-      Integer result = Integer.valueOf(streams.readLine());
-      System.out.println("Result of  " + getPrototypeMethod(methodNameAndArgs) + " is " + result);
-      System.out.println();
-      Thread.sleep(500);
-    } catch (IOException e) {
-      interupt();
-    } catch (InterruptedException e) {
-      //Not a problem
-    }
+
+  private void askMethod() {
+    boolean loop = false;
+    String message = "";
+    do {
+      loop = false;
+      String methodNameAndArgs = ClientInterface.askMethod();
+      streams.writeAndFlush(methodNameAndArgs);
+
+      try {
+        message = streams.readLine();
+        Integer result = Integer.valueOf(message);
+        System.out.println("Result of  " + getPrototypeMethod(methodNameAndArgs) + " is " + result);
+        System.out.println();
+        Thread.sleep(500);
+      } catch (NumberFormatException e) {
+        if ("no such method".equals(message.toLowerCase())) {
+          System.out.println(
+              "The method does not exist ! "
+                  + "Please ensure you have the correct arguments/method name"
+          );
+          loop = true;
+        }
+      } catch (IOException e) {
+        interupt();
+      } catch (InterruptedException e) {
+        //Not a problem
+      }
+    } while(loop);
   }
 
   private String getPrototypeMethod(String methodNameAndArgs) {
