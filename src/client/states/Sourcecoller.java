@@ -5,7 +5,6 @@ import client.network.FileSender;
 
 public class Sourcecoller extends AbstractClientState {
 
-
   public Sourcecoller(String name) {
     super(name);
   }
@@ -16,5 +15,4 @@ public class Sourcecoller extends AbstractClientState {
     String path = ClientInterface.askFileName(false);
     fileSender.send(path);
   }
-
 }

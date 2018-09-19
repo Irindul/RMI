@@ -56,13 +56,13 @@ public class ClientInterface {
 
   public static String askFileName(boolean compiled) {
     String message = "Enter absolute path ";
-    if(compiled) {
-      message+="for .class ";
+    if (compiled) {
+      message += "for .class ";
     } else {
-      message+="for .java ";
+      message += "for .java ";
     }
 
-    message+="file";
+    message += "file";
     System.out.println(message);
     Scanner sc = new Scanner(System.in);
     return sc.nextLine();

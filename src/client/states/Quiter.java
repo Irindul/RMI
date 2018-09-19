@@ -1,9 +1,18 @@
 package client.states;
 
-public class Quiter implements ClientState {
+public class Quiter extends AbstractClientState {
+
+  public Quiter(String name) {
+    super(name);
+  }
 
   @Override
   public void interact() {
-    //Do nothing
+
+  }
+
+  @Override
+  public void subinteractions() {
+    Thread.currentThread().interrupt();
   }
 }

@@ -4,6 +4,7 @@ import common.LoopingRunnable;
 import helpers.SocketStreams;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.logging.Logger;
 import server.parser.CommandParser;
 import server.states.Idle;
@@ -46,7 +47,7 @@ public class Connection implements LoopingRunnable {
       e.printStackTrace();
     }
     interupt();
-    if(open) {
+    if (open) {
       LOGGER.info("Connection closed");
       open = false;
     }
@@ -55,17 +56,21 @@ public class Connection implements LoopingRunnable {
   @Override
   public void execute() {
     try {
-      LOGGER.info("Waiting for commands");
+      LOGGER.info("Waiting for command");
       String command = streams.readLine();
       if (command != null) {
-        LOGGER.info("Client ask for : " + command);
+        LOGGER.info("Client asked for : " + command);
         state = parser.parse(command);
         state.execute();
       } else {
         close();
       }
+    } catch (SocketException e) {
+      if ("connection reset".equals(e.getLocalizedMessage().toLowerCase())) {
+        this.interupt();
+      }
     } catch (IOException e) {
-      e.printStackTrace();
+      this.interupt();
     }
   }
 }
