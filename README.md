@@ -1,5 +1,9 @@
 # [8INF843] - TP1
 
+Ce rapport est écrit avec le format Makdown. Pour un meilleur rendu, il est conseillé de le lire
+dans un éditeur qui supporte ce format. On peut le trouver directement parsé sur la page GitHub : 
+[TP1 - Code source](https://github.com/Irindul/RMI) 
+
 ## Description du projet
 
 ### Dépendances
@@ -136,9 +140,9 @@ En considérant que la méthode de l'objet à le prototype `int add(Integer a, I
  L'encapsulation des appels socket permet de rendre l'utilisation de l'application plus facile pour les utilisateurs.  
  Selon le choix, il peut être demandé de choisir le fichier à envoyé. 
  Bien que le choix soit laissé libre ici (à condition de respecter l'architecture de package clientMaClasse)
- il est conseillé d'envoyer le fichier '/src/client/IntegerCalculator' car aucun test n'a été effectué pour s'assurer du fonctionnement. 
- Si ObjectColl est choisi, une nouvelle instance de IntegerCalculator est crée et l'objet est envoyé sérialisé au serveur.
- La sérialization se fait avec celle de Java, en implémentant la méthode `Serialize` dans `IntegerCalculator`.
+ il est conseillé d'envoyer le fichier './src/client/IntegerCalculator' car aucun test n'a été effectué pour s'assurer du fonctionnement avec d'autres classes.  
+ Si ObjectColl est choisi, une nouvelle instance de `IntegerCalculator` est crée et l'objet est envoyé sérialisé au serveur.
+ La sérialization se fait avec celle de Java, en implémentant l'interface `Serializable` dans `IntegerCalculator`.
  
  
  Enfin, on demande quelle méthode appeler avec quels paramètres. 
