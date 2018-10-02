@@ -64,11 +64,14 @@ public class FileReceiver {
   private void initializeStream() throws FileNotFoundException {
     dataInputStream = new DataInputStream(streams.getInputStream());
     initializeFolder();
-    fileOutputStream = new FileOutputStream("./resources/client/" + fileName);
+
+    String path = "resources" + File.separator + "client" + File.separator;
+    fileOutputStream = new FileOutputStream(path + fileName);
   }
 
   private void initializeFolder() {
-    File directory = new File("resources/client");
+    String path = "resources" + File.separator + "client";
+    File directory = new File(path);
     if (!directory.exists()) {
       LOGGER.info("The directory structure was created");
       directory.mkdirs();
@@ -80,7 +83,6 @@ public class FileReceiver {
 
     int read;
     int remaining = size;
-
 
     while ((read = dataInputStream.read(buffer, 0, Math.min(buffer.length, remaining))) > 0) {
       remaining -= read;

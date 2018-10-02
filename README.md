@@ -75,10 +75,11 @@ optional.ifPresent(new Consumer<Type>() {
 #### Serveur 
 Le serveur se lance sur un port (8080 par défaut). 
 Le port peut être spécifié grâce à la variable 
-d'environnement PORT. Le PORT doit être supérieur à 1024. 
+d'environnement RMI_PORT. Le RMI_PORT doit être supérieur à 1024. 
 
+Dans un terminal linux : 
 ```bash
-$ export PORT=8081
+$ export RMI_PORT=8081
 ```
 
 Le serveur attend ensuite les connections. Chaque nouvelle connection est lancée 

@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 public class FileSender {
 
@@ -42,7 +43,8 @@ public class FileSender {
   }
 
   private String getFileName(String absolutePath) {
-    String[] parts = absolutePath.split(File.separator);
+    String pattern = Pattern.quote(File.separator);
+    String[] parts = absolutePath.split(pattern);
     return parts[parts.length - 1];
   }
 
